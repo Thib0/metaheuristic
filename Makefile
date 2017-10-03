@@ -2,6 +2,7 @@ CC = g++
 CXXFLAGS = -Wall -Wextra -Werror -pedantic -std=c++14 -g
 OBJ = main.o mheu.o
 BIN = mheu
+VPATH = src
 
 $(BIN): $(OBJ)
 
