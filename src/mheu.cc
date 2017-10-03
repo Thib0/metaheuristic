@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <iostream>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -76,4 +78,26 @@ Recruit::compute_total_length() const
         }
     }
     return total / 2;
+}
+
+void
+Recruit::swap(short key1, short key2)
+{
+    auto vec_tmp = std::vector<short>(components_[key1]);
+    components_[key1] = components_[key2];
+    components_[key2] = vec_tmp;
+}
+
+void
+Recruit::randomize()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, components_.size() - 1);
+    for (int i = 0; i < 25; ++i)
+    {
+        auto rand = dis(gen);
+        auto& vec = components_[rand];
+        swap(rand, vec[dis(gen) % vec.size()]);
+    }
 }
