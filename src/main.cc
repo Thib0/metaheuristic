@@ -6,8 +6,8 @@ int main(void)
 {
     Recruit r;
     r.init_initial_state();
-    std::cout << r.compute_total_length() << std::endl;
+    std::cout << "Initializing: " << r.compute_total_length() << std::endl;
     r.randomize();
-    std::cout << r.compute_total_length() << std::endl;
+    r.solve();
     return 0;
 }

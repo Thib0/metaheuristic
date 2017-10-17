@@ -1,4 +1,7 @@
+#include <cassert>
+#include <chrono>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <utility>
@@ -88,16 +91,78 @@ Recruit::swap(short key1, short key2)
     components_[key2] = vec_tmp;
 }
 
-void
-Recruit::randomize()
+template <typename T>
+short get_random_index(T& v)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, components_.size() - 1);
-    for (int i = 0; i < 25; ++i)
+    std::uniform_int_distribution<> dis(0, v.size() - 1);
+    return dis(gen);
+}
+
+void
+Recruit::randomize()
+{
+    for (int i = 0; i < 250; ++i)
+        swap(get_random_index(components_), get_random_index(components_));
+}
+
+void
+write_vector(std::ofstream& out, std::vector<short> v)
+{
+    for (auto& el : v)
+        out << el << (el != v.back() ? "," : "");
+    out << std::endl;
+}
+
+void
+Recruit::export_components(unsigned count, bool last) const
+{
+    std::ofstream out;
+    out.open("out/" + (last ? "last" : std::to_string(count)) + ".csv", std::ofstream::out
+                                                      | std::ofstream::in
+                                                      | std::ofstream::trunc);
+    for (auto& c : components_)
     {
-        auto rand = dis(gen);
-        auto& vec = components_[rand];
-        swap(rand, vec[dis(gen) % vec.size()]);
+        out << c.first << ",";
+        write_vector(out, c.second);
     }
+    out.close();
+}
+
+void
+Recruit::solve()
+{
+    std::cout << "Before solving: " << compute_total_length() << std::endl;
+    auto t1 = std::chrono::high_resolution_clock::now();
+    unsigned loop_counts = 0;
+    export_components(loop_counts);
+    while (compute_total_length() != optimum && temp >= stop)
+    {
+        auto key1 = get_random_index(components_);
+        auto key2 = get_random_index(components_);
+        auto last_length = compute_total_length();
+
+        swap(key1, key2);
+        auto current_length = compute_total_length();
+
+        if (current_length > last_length)
+        {
+            swap(key2, key1);
+            assert(compute_total_length() == last_length);
+        }
+
+        temp *= tau;
+        ++loop_counts;
+        if (!(loop_counts % 200))
+            export_components(loop_counts);
+    }
+    export_components(loop_counts, true);
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout << "After solving: " << compute_total_length() << std::endl;
+    std::cout << "Execution time: "
+        << std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count()
+        << " milliseconds" << std::endl;
+
+    std::cout << "Loop counts: " << loop_counts << std::endl;
 }

@@ -9,10 +9,13 @@ class Recruit
         short compute_total_length() const;
         void swap(short key1, short key2);
         void randomize();
+        void solve();
+        void export_components(unsigned count, bool last = false) const;
 
     private:
         std::map<short, std::vector<short>> components_;
 };
-static constexpr float temp = 1995;
-static constexpr float step = 0.99;
-static constexpr float stop = 0.01;
+static double temp = 6666666;
+static double tau = 0.999;
+static double stop = 0.000001;
+static constexpr int optimum = 200;
