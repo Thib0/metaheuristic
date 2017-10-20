@@ -1,4 +1,5 @@
 #include <map>
+#include <vector>
 
 class Recruit
 {
