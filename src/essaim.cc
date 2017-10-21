@@ -3,14 +3,41 @@
 
 int main()
 {
-  De_Jong_F1 djf1 = De_Jong_F1("djf1", 4, -5.12, 5.12);
-  Swarm s = Swarm(&djf1, 20000, 101, 40);
-  std::cout << s.gBest << std::endl;
-  s.resolve();
-  std::cout << s.gBest << std::endl;
-  std::cout << "sol vector:\n";
-  for (auto i : s.solution)
-    std::cout << i << ", ";
-  std::cout << "\n";
-  return 0;
+    std::vector<Function*> functions;
+    De_Jong_F1 djf1 = De_Jong_F1("djf1", 4, -5.12, 5.12); //gbest 0, vect (0, .., 0)
+    Michalewicz mich1 = Michalewicz("micha_dim_2", 2, 0.0, M_PI); // gbset -1.80
+    Michalewicz mich2 = Michalewicz("micha_dim_5", 5, 0.0, M_PI); // gbest -4.687
+    Michalewicz mich3 = Michalewicz("micha_dim_10", 10, 0.0, M_PI); // gbest -9.68
+    De_Jong_F2 djf2 = De_Jong_F2("djf2", 2, -2.048, 2.048); // gbest 0 vect (0, 0)
+    De_Jong_F3 djf3_1 = De_Jong_F3("djf3_dim_2", 2, -5.12, 5.12); // gbest -6*dim = -12
+    De_Jong_F3 djf3_2 = De_Jong_F3("djf3_dim_5", 5, -5.12, 5.12); // gbest -6*dim = -30
+    Goldstein_Price gld_price = Goldstein_Price("gld_price", 2, -2.0, 2.0); // gbest = 3 vect(-1, 0)
+    Rosenbrock ros = Rosenbrock("rosenbrock", 4, -2.048, 2.048); // gbest 0 vect (1, .. 1)
+    Zakharov zak = Zakharov("zakharov", 4, -5.0, 10.0); // gbest 0 vect (0, ... 0)
+    Schwefel sch = Schwefel("schefel", 4, -500.0, 500.0); //gbest - n * 418.9829 vect (420.9687, .. 420.9687)
+
+    functions.push_back(&djf1);
+    functions.push_back(&mich1);
+    functions.push_back(&mich2);
+    functions.push_back(&mich3);
+    functions.push_back(&djf2);
+    functions.push_back(&djf3_1);
+    functions.push_back(&djf3_2);
+    functions.push_back(&gld_price);
+    functions.push_back(&ros);
+    functions.push_back(&zak);
+    functions.push_back(&sch);
+
+    for (auto f : functions)
+    {
+        Swarm s = Swarm(f, 20000, 101, 40);
+        s.resolve();
+        std::cout << "function: " << f->getName() << " best " << s.gBest << std::endl;
+        std::cout << "sol vector:\n";
+        for (auto i : s.solution)
+            std::cout << i << ", ";
+        std::cout << "\n\n";
+
+    }
+    return 0;
 }
