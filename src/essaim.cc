@@ -1,9 +1,8 @@
 #include <iostream>
 #include "swarm.hh"
 
-int main()
+int main(void)
 {
-    std::vector<Function*> functions;
     De_Jong_F1 djf1 = De_Jong_F1("djf1", 4, -5.12, 5.12); //gbest 0, vect (0, .., 0)
     Michalewicz mich1 = Michalewicz("micha_dim_2", 2, 0.0, M_PI); // gbset -1.80
     Michalewicz mich2 = Michalewicz("micha_dim_5", 5, 0.0, M_PI); // gbest -4.687
@@ -16,17 +15,9 @@ int main()
     Zakharov zak = Zakharov("zakharov", 4, -5.0, 10.0); // gbest 0 vect (0, ... 0)
     Schwefel sch = Schwefel("schefel", 4, -500.0, 500.0); //gbest - n * 418.9829 vect (420.9687, .. 420.9687)
 
-    functions.push_back(&djf1);
-    functions.push_back(&mich1);
-    functions.push_back(&mich2);
-    functions.push_back(&mich3);
-    functions.push_back(&djf2);
-    functions.push_back(&djf3_1);
-    functions.push_back(&djf3_2);
-    functions.push_back(&gld_price);
-    functions.push_back(&ros);
-    functions.push_back(&zak);
-    functions.push_back(&sch);
+    std::vector<Function*> functions = { &djf1, &mich1, &mich2, &mich3, &djf2,
+                                         &djf3_1, &djf3_2, &gld_price, &ros,
+                                         &zak, &sch };
 
     for (auto f : functions)
     {

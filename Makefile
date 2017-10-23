@@ -1,19 +1,15 @@
 CC = g++
 CXXFLAGS = -Wall -Wextra -pedantic -std=c++14 -g#-O3 -DNDEBUG
 OBJ = main.o mheu.o
-OBJS = function.o particle.o swarm.o
+OBJS = function.o particle.o swarm.o essaim.o
 BIN = mheu
+BIN2 = swarm
 VPATH = src
 
-##################################################################
-OBJS = function.o particle.o swarm.o essaim.o
-TARGET = essaim
+all: $(BIN) $(BIN2)
 
-$(TARGET) : $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS)
-
-
-essaim: $(OBJS)
+$(BIN2) : $(OBJS)
+	$(CC) -o $(BIN2) $(OBJS)
 
 $(BIN): $(OBJ)
 
