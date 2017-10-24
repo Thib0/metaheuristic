@@ -1,5 +1,167 @@
 #include <iostream>
 #include "swarm.hh"
+#include <fstream>
+#include <sstream>
+
+void run_particules(Function* f)
+{
+    std::stringstream str;
+    str << f->getName() << "_particules.txt";
+
+    std::ofstream file;
+    file.open(str.str(), std::ios::out);
+
+    if (!file)
+    {
+        std::cerr << "Error: could not open/create file" << std::endl;
+        exit(1);
+    }
+
+    file << f->getName() << " particules" << std::endl;
+
+    for (int nb_particules = 0; nb_particules < 200; nb_particules++)
+    {
+        float gBest = 0;
+        int nb_run = 100;
+        {
+            Swarm s = Swarm(f, 2000, 100, nb_particules);
+            s.resolve();
+            gBest += s.gBest;
+        }
+        file << nb_particules << " " << (gBest / nb_run) << std::endl;
+    }
+
+    file.close();
+}
+
+void run_iterations(Function* f)
+{
+    std::stringstream str;
+    str << f->getName() << "_iterations.txt";
+    std::ofstream file;
+    file.open(str.str(), std::ios::out);
+
+    if (!file)
+    {
+        std::cerr << "Error: could not open/create file" << std::endl;
+        exit(1);
+    }
+
+    file << f->getName() << " iterations" << std::endl;
+
+    for (int nb_iter = 100; nb_iter < 10000; nb_iter += 100)
+    {
+        float gBest = 0;
+        int nb_run = 100;
+        for (int i = 0; i < nb_run; i++)
+        {
+            Swarm s = Swarm(f, nb_iter, 100, 40);
+            s.resolve();
+            gBest += s.gBest;
+        }
+
+        file << nb_iter << " " << (gBest / nb_run) << std::endl;
+    }
+
+    file.close();
+}
+
+void run_c1(Function* f)
+{
+    std::stringstream str;
+    str << f->getName() << "_c1.txt";
+    std::ofstream file;
+    file.open(str.str(), std::ios::out);
+
+    if (!file)
+    {
+        std::cerr << "Error: could not open/create file" << std::endl;
+        exit(1);
+    }
+
+    file << f->getName() << " c1" << std::endl;
+
+    for (float c = 0.0; c < 10.0; c += 0.1)
+    {
+        float gBest = 0;
+        int nb_run = 100;
+        for (int i = 0; i < nb_run; i++)
+        {
+            Swarm s = Swarm(f, 2000, 100, 40, c, 1.0, 1.0);
+            s.resolve();
+            gBest += s.gBest;
+        }
+
+        file << c << " " << (gBest / nb_run) << std::endl;
+    }
+
+    file.close();
+}
+
+void run_c2(Function* f)
+{
+    std::stringstream str;
+    str << f->getName() << "_c2.txt";
+    std::ofstream file;
+    file.open(str.str(), std::ios::out);
+
+    if (!file)
+    {
+        std::cerr << "Error: could not open/create file" << std::endl;
+        exit(1);
+    }
+
+    file << f->getName() << " c2" << std::endl;
+
+    for (float c = 0.0; c < 10.0; c += 0.1)
+    {
+        float gBest = 0;
+        int nb_run = 100;
+        for (int i = 0; i < nb_run; i++)
+        {
+            Swarm s = Swarm(f, 2000, 100, 40, 1.0, c, 1.0);
+            s.resolve();
+            gBest += s.gBest;
+        }
+
+        file << c << " " << (gBest / nb_run) << std::endl;
+    }
+
+
+    file.close();
+}
+
+void run_c3(Function* f)
+{
+    std::stringstream str;
+    str << f->getName() << "_c3.txt";
+    std::ofstream file;
+    file.open(str.str(), std::ios::out);
+
+    if (!file)
+    {
+        std::cerr << "Error: could not open/create file" << std::endl;
+        exit(1);
+    }
+
+    file << f->getName() << " c3" << std::endl;
+
+    for (float c = 0.0; c < 10.0; c += 0.1)
+    {
+        float gBest = 0;
+        int nb_run = 100;
+        for (int i = 0; i < nb_run; i++)
+        {
+            Swarm s = Swarm(f, 2000, 100, 40, 1.0, 1.0, c);
+            s.resolve();
+            gBest += s.gBest;
+        }
+
+        file << c << " " << (gBest / nb_run) << std::endl;
+    }
+
+    file.close();
+}
 
 int main(void)
 {
@@ -19,16 +181,41 @@ int main(void)
                                          &djf3_1, &djf3_2, &gld_price, &ros,
                                          &zak, &sch };
 
+
+    std::cout << "LAUNCH REGULAR SWARM" << std::endl;
+
     for (auto f : functions)
     {
-        Swarm s = Swarm(f, 20000, 101, 40);
-        s.resolve();
-        std::cout << "function: " << f->getName() << " best " << s.gBest << std::endl;
+        float gBest = 0;
+        int nb_run = 100;
+        std::vector<float> solution;
+        for (int i = 0; i < nb_run; i++)
+        {
+            Swarm s = Swarm(f, 2000, 100, 40);
+            s.resolve();
+            gBest += s.gBest;
+            solution = s.solution;
+        }
+
+        float moy_best = gBest / nb_run;
+        std::cout << "function: " << f->getName() << " moyenne  best " << moy_best << std::endl;
         std::cout << "sol vector:\n";
-        for (auto i : s.solution)
+        for (auto i : solution)
             std::cout << i << ", ";
         std::cout << "\n\n";
-
     }
+
+    std::cout << "LAUNCH STAT SWARM" << std::endl;
+
+    for (auto f : functions)
+    {
+        run_particules(f);
+        run_iterations(f);
+        run_c1(f);
+        run_c2(f);
+        run_c3(f);
+    }
+
+
     return 0;
 }

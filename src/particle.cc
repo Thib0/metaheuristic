@@ -2,9 +2,15 @@
 #include <cfloat>
 #include <limits>
 #include <random>
+#include <functional>
 
 float getRand(float min, float max)
 {
+    /*std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_real_distribution <double> uid(min, max);
+
+    return uid(rng);*/
   return (float)((max - min)*(std::rand()/(float)RAND_MAX) + min);
 }
 
@@ -35,7 +41,7 @@ float Particle::solve()
   return res;
 }
 
-void Particle::update(const std::vector<float> gBest)
+void Particle::update(const std::vector<float> gBest, float c1, float c2, float c3)
 {
   std::vector<float> newSpeed;
 

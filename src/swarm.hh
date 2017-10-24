@@ -7,6 +7,8 @@ class Swarm
 {
   public:
     Swarm(Function *f, size_t iter, size_t nbrun, size_t nbpar);
+    Swarm(Function *f, size_t iter, size_t nbrun, size_t nbpar, float c1,
+          float c2, float c3);
 
     void resolve(int precision = 4);
     float gBest;
@@ -20,4 +22,7 @@ class Swarm
     size_t nbRun;
     Function *f;
     std::vector<Particle> particles;
+    float c1_;
+    float c2_;
+    float c3_;
 };

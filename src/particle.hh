@@ -9,7 +9,7 @@ class Particle
     Particle(Function* f);
 
     float solve();
-    void update(const std::vector<float> gBest);
+    void update(const std::vector<float> gBest, float c1, float c2, float c3);
 
     std::vector<float> getBestPos();
 

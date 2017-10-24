@@ -9,6 +9,23 @@ Swarm::Swarm(Function *f, size_t iter, size_t nbrun, size_t nbpar)
     nbRun = nbrun;
     if (nbRun % 2 == 0)
         nbRun++;
+    c1_ = 1.0;
+    c2_ = 1.0;
+    c3_ = 1.0;
+}
+
+Swarm::Swarm(Function *f, size_t iter, size_t nbrun, size_t nbpar, float c1,
+             float c2, float c3)
+{
+    nbParticles = nbpar;
+    this->f = f;
+    nbIter = iter;
+    nbRun = nbrun;
+    if (nbRun % 2 == 0)
+        nbRun++;
+    c1_ = c1;
+    c2_ = c2;
+    c3_ = c3;
 }
 
 void Swarm::resolve(int precision)
@@ -30,7 +47,7 @@ void Swarm::resolve(int precision)
     }
 
     for (size_t p = 0; p < nbParticles; p++)
-      particles[p].update(particles[gbest_idx].getBestPos());
+      particles[p].update(particles[gbest_idx].getBestPos(), c1_, c2_, c3_);
   }
 }
 
