@@ -4,8 +4,10 @@ import re, sys
 
 
 def parse_file (file_name):
-    file = open("test.txt", "r")
+    file = open(file_name, "r")
     i = 0
+
+    title =""
 
     gbest = []
     var_value = []
@@ -14,6 +16,7 @@ def parse_file (file_name):
 
         if i == 0:
             plt.title(line)
+            title = line
             i = i + 1
             tmp = re.split(" ", line)
             plt.xlabel(tmp[len(tmp) - 1])
@@ -25,14 +28,22 @@ def parse_file (file_name):
             print("Error: line has more then 2 values")
             break
 
-        gbest.append(int(tmp[1]))
-        var_value.append(int(tmp[0].strip()))
+        gbest.append(float(tmp[1].strip()))
+        var_value.append(float(tmp[0]))
 
-    print(gbest)
-    print(var_value)
+#    print(gbest)
+#    print(var_value)
 
     plt.plot(var_value, gbest)
     plt.ylabel('Minimum global')
-    plt.show()
+#    plt.show()
+
+    title += ".png"
+
+    plt.savefig(title);
 
 
+for i in range (len(sys.argv)):
+    if i == 0:
+        continue
+    parse_file(sys.argv[i])

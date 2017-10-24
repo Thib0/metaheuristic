@@ -19,7 +19,7 @@ void run_particules(Function* f)
 
     file << f->getName() << " particules" << std::endl;
 
-    for (int nb_particules = 0; nb_particules < 200; nb_particules++)
+    for (int nb_particules = 10; nb_particules < 200; nb_particules++)
     {
         float gBest = 0;
         int nb_run = 100;
@@ -198,7 +198,7 @@ int main(void)
         }
 
         float moy_best = gBest / nb_run;
-        std::cout << "function: " << f->getName() << " moyenne  best " << moy_best << std::endl;
+        std::cout << "function: " << f->getName() << " moyenne  best " << (gBest / nb_run) << std::endl;
         std::cout << "sol vector:\n";
         for (auto i : solution)
             std::cout << i << ", ";
