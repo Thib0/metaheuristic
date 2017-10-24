@@ -113,7 +113,7 @@ float Goldstein_Price::solve(std::vector<float> x)
     float var1 = x1 + x2 + 1;
     float var2 = 19 - 14 * x1 + 3 * x1 * x1 - 14 * x2 + 6 * x1 * x2 + 3 * x2 * x2;
     float var3 = 1 + var1 * var1 * var2;
-    float var4 = 2 * x1 - 3 * x1;
+    float var4 = 2 * x1 - 3 * x2;
     float var5 = 18 - 32 * x1 + 12 * x1 * x1 - 48 * x2 - 36 * x1 * x2
                  + 27 * x2 * x2;
     float var6 = 30 + var4 * var4 * var5;
