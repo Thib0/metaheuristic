@@ -212,7 +212,7 @@ int main(void)
 
     for (auto f : functions)
     {
-        Function *f = &sch;
+        //Function *f = &sch;
         run_particules(f);
         run_iterations(f);
         run_c1(f);
