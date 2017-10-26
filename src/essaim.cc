@@ -19,10 +19,12 @@ void run_particules(Function* f)
 
     file << f->getName() << " particules" << std::endl;
 
-    for (int nb_particules = 10; nb_particules < 200; nb_particules++)
+    for (int nb_particules = 10; nb_particules < 1000; nb_particules++)
     {
-        float gBest = 0;
+        float gBest = 0.0;
         int nb_run = 100;
+
+        for (int i = 0; i < nb_run; i++)
         {
             Swarm s = Swarm(f, 2000, 100, nb_particules);
             s.resolve();
@@ -81,7 +83,7 @@ void run_c1(Function* f)
 
     file << f->getName() << " c1" << std::endl;
 
-    for (float c = 0.0; c < 10.0; c += 0.1)
+    for (float c = 0.0; c < 50.0; c += 0.05)
     {
         float gBest = 0;
         int nb_run = 100;
@@ -113,7 +115,7 @@ void run_c2(Function* f)
 
     file << f->getName() << " c2" << std::endl;
 
-    for (float c = 0.0; c < 10.0; c += 0.1)
+    for (float c = 0.0; c < 50.0; c += 0.05)
     {
         float gBest = 0;
         int nb_run = 100;
@@ -146,7 +148,7 @@ void run_c3(Function* f)
 
     file << f->getName() << " c3" << std::endl;
 
-    for (float c = 0.0; c < 10.0; c += 0.1)
+    for (float c = 0.0; c < 50.0; c += 0.05)
     {
         float gBest = 0;
         int nb_run = 100;
@@ -182,23 +184,24 @@ int main(void)
                                          &zak, &sch };
 
 
-    std::cout << "LAUNCH REGULAR SWARM" << std::endl;
+    //std::cout << "LAUNCH REGULAR SWARM" << std::endl;
 
     for (auto f : functions)
     {
+        //Function *f = &gld_price;
         float gBest = 0;
         int nb_run = 100;
         std::vector<float> solution;
-        for (int i = 0; i < nb_run; i++)
+        //for (int i = 0; i < nb_run; i++)
         {
-            Swarm s = Swarm(f, 2000, 100, 40);
+            Swarm s = Swarm(f, 10000, 100, 50, 1.0, 1.0, 2.0);
             s.resolve();
             gBest += s.gBest;
             solution = s.solution;
         }
 
         float moy_best = gBest / nb_run;
-        std::cout << "function: " << f->getName() << " moyenne  best " << (gBest / nb_run) << std::endl;
+        std::cout << "function: " << f->getName() << " moyenne  best " << (gBest) << std::endl;
         std::cout << "sol vector:\n";
         for (auto i : solution)
             std::cout << i << ", ";
@@ -209,13 +212,13 @@ int main(void)
 
     for (auto f : functions)
     {
+        Function *f = &sch;
         run_particules(f);
         run_iterations(f);
         run_c1(f);
         run_c2(f);
         run_c3(f);
     }
-
 
     return 0;
 }

@@ -11,7 +11,7 @@ float getRand(float min, float max)
     std::uniform_real_distribution <double> uid(min, max);
 
     return uid(rng);*/
-  return (float)((max - min)*(std::rand()/(float)RAND_MAX) + min);
+    return (float)((max - min)*(std::rand()/(float)RAND_MAX) + min);
 }
 
 Particle::Particle(Function* f)

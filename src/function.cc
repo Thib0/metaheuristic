@@ -91,10 +91,16 @@ De_Jong_F3::De_Jong_F3(std::string name, int d, float min, float max)
 float De_Jong_F3::solve(std::vector<float> x)
 {
     if (!x.size())
-        return 0.0;
-    float val = x.back();
-    x.pop_back();
-    return val + this->solve(x);
+        return 0;
+
+    int var = 0;
+
+    for (float f : x)
+        var += f;
+
+    float res = var;
+
+    return res;
 }
 
 Goldstein_Price::Goldstein_Price(std::string name, int d, float min, float max)
@@ -110,15 +116,19 @@ float Goldstein_Price::solve(std::vector<float> x)
     }
     float x1 = x[0];
     float x2 = x[1];
-    float var1 = x1 + x2 + 1;
-    float var2 = 19 - 14 * x1 + 3 * x1 * x1 - 14 * x2 + 6 * x1 * x2 + 3 * x2 * x2;
-    float var3 = 1 + var1 * var1 * var2;
-    float var4 = 2 * x1 - 3 * x2;
-    float var5 = 18 - 32 * x1 + 12 * x1 * x1 - 48 * x2 - 36 * x1 * x2
-                 + 27 * x2 * x2;
-    float var6 = 30 + var4 * var4 * var5;
+    /*float var1 = x1 + x2 + 1.0;
+    float var2 = 19.0 - 14.0 * x1 + 13.0 * x1 * x1 - 14.0 * x2 + 6.0 * x1 * x2 + 3.0 * x2 * x2;
+    float var3 = 1.0 + var1 * var1 * var2;
+    float var4 = 2.0 * x1 - 3.0 * x2;
+    float var5 = 18.0 - 32.0 * x1 + 12.0 * x1 * x1 - 48.0 * x2 - 36.0 * x1 * x2
+                 + 27.0 * x2 * x2;
+    float var6 = 30.0 + var4 * var4 * var5;*/
 
-    return var3 * var6;
+    float var = (1.0 + std::pow((x1 + x2 + 1.0), 2) * (19.0 - 14.0 * x1 + 3.0 * x1 * x1
+                - 14.0 * x2 + 6.0 * x1 * x2 + 3.0 * x2 *x2)) * (30 + std::pow((2 * x1 - 3 * x2), 2)
+                * (18 - 32 * x1 + 12 * x1 * x1 + 48 * x2 - 36 * x1 * x2 + 27 * x2 * x2));
+
+    return var;
 }
 
 Rosenbrock::Rosenbrock(std::string name, int d, float min, float max)
@@ -171,8 +181,11 @@ float Schwefel::solve(std::vector<float> x)
     if (!x.size())
         return 0.0;
 
-    float var = 418.9829 - x.back() * std::sin(std::sqrt(std::abs(x.back())));
-    x.pop_back();
+    float var = 0.0;
 
-    return var + this->solve(x);
+    for (float f : x)
+    {
+        var += - f * std::sin(std::sqrt(std::abs(f)));
+    }
+    return 418.9820 - var;
 }
